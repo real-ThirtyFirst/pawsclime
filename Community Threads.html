@@ -1,0 +1,531 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lobster&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>PawsCommunity/Exercise</title>
+    <style>
+      .card {
+          margin-bottom: 1rem;
+      }
+
+      .comments-section {
+          display: none;
+      }
+
+      .admin-mode .edit-button,
+      .admin-mode .delete-button {
+          display: none;
+      }
+
+      .user-mode .edit-button,
+      .user-mode .delete-button {
+          display: none;
+      }
+
+      .admin-buttons {
+          display: none;
+      }
+      .admin-mode .admin-buttons {
+          display: block;
+      }
+
+      /* Smooth animations using animate.css */
+      @keyframes fadeIn {
+          from {
+              opacity: 0;
+              transform: translateY(-20px);
+          }
+          to {
+              opacity: 1;
+              transform: translateY(0);
+          }
+      }
+
+      .animate__fadeIn {
+          animation: fadeIn 0.5s ease;
+      }
+
+      /* Button hover animation */
+      .btn:hover {
+          transform: translateY(-3px);
+          transition: transform 0.2s ease;
+      }
+    </style>
+</head>
+<body>
+    <header>
+      <nav class="navbar navbar-expand-lg">
+        <div class="container">
+          <a class="navbar-brand fw-bolder fst-italic" aria-current="page"  href="index.html">PawsClime</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div>
+            <div class="nav-item d-flex align-items-center">
+              <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasRight" role="button" aria-controls="offcanvasExample"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+              </svg> Dashboard</a>
+            </div>
+          </div>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html#weather">Weather & Temperature Tracking</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#pet-wellness">Pet Wellness</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="index.html#community">Community</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="index.html#FAQs">FAQs</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+<!-- Community Forums -->
+<div class="container mt-4">
+  <div class="d-flex justify-content-between mb-3 animate__animated animate__fadeIn">
+      <h1>Community Forum</h1>
+      <button id="modeToggle" class="btn btn-primary" onclick="toggleMode()">User Mode</button>
+  </div>
+  
+  <div class="card mb-4 animate__animated animate__fadeIn">
+      <div class="card-body">
+          <h5 class="card-title">Create a Post</h5>
+          <form id="createPostForm" onsubmit="createPost(event)">
+              <div class="form-group">
+                  <input type="text" id="authorName" class="form-control" placeholder="Your Name" required>
+              </div>
+              <div class="form-group">
+                  <input type="text" id="postTitle" class="form-control" placeholder="Post Title" required>
+              </div>
+              <div class="form-group">
+                  <textarea id="postContent" class="form-control" rows="3" placeholder="What's on your mind?" required></textarea>
+              </div>
+              <p>Choose what topic?</p>
+              <div class="form-group">
+                  <select id="postTags" class="form-control">
+                      <option value="Nutrition">Nutrition</option>
+                      <option value="Exercise">Exercise</option>
+                      <option value="Grooming">Grooming</option>
+                  </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Post</button>
+          </form>
+      </div>
+  </div>
+  
+  <div class="mb-3 animate__animated animate__fadeIn">
+      <button class="btn btn-secondary" onclick="filterPosts('all')">All posts</button>
+      <button class="btn btn-secondary" onclick="filterPosts('Nutrition')">Nutrition</button>
+      <button class="btn btn-secondary" onclick="filterPosts('Exercise')">Exercise</button>
+      <button class="btn btn-secondary" onclick="filterPosts('Grooming')">Grooming</button>
+  </div>
+  
+  <div id="postsSection" class="animate__animated animate__fadeIn"></div>
+</div>
+
+<footer class="container">
+    <div class="container">
+      <footer class="pt-2">
+        <div class="row">
+          <div class="d-flex justify-content-between pt-4">
+            <form>
+              <h3>Donate or Support PawsClime</h3>
+              <p>Your contributions help us provide essential care, shelter, and medical treatment for stray pets. Together, we can give them a second chance at a happy and healthy life. Every donation counts.</p>
+              <div class="d-flex justify-content-between ">
+                <div class="d-flex flex-column flex-sm-row w-50 gap-2">
+                  <label for="newsletter1" class="visually-hidden">Email address</label>
+                  <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
+                  <button class="btn btn-primary" type="button">Support</button>
+                </div>
+                <div class="donation-links d-flex align-items-center gap-3 mx-auto">
+                  <a href="#" class="text-decoration-none text-white">Donate Us Here: <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#ffffff" class="bi bi-paypal" viewBox="0 0 16 16">
+                    <path d="M14.06 3.713c.12-1.071-.093-1.832-.702-2.526C12.628.356 11.312 0 9.626 0H4.734a.7.7 0 0 0-.691.59L2.005 13.509a.42.42 0 0 0 .415.486h2.756l-.202 1.28a.628.628 0 0 0 .62.726H8.14c.429 0 .793-.31.862-.731l.025-.13.48-3.043.03-.164.001-.007a.35.35 0 0 1 .348-.297h.38c1.266 0 2.425-.256 3.345-.91q.57-.403.993-1.005a4.94 4.94 0 0 0 .88-2.195c.242-1.246.13-2.356-.57-3.154a2.7 2.7 0 0 0-.76-.59l-.094-.061ZM6.543 8.82a.7.7 0 0 1 .321-.079H8.3c2.82 0 5.027-1.144 5.672-4.456l.003-.016q.326.186.548.438c.546.623.679 1.535.45 2.71-.272 1.397-.866 2.307-1.663 2.874-.802.57-1.842.815-3.043.815h-.38a.87.87 0 0 0-.863.734l-.03.164-.48 3.043-.024.13-.001.004a.35.35 0 0 1-.348.296H5.595a.106.106 0 0 1-.105-.123l.208-1.32z"/>
+                  </svg></a>
+                  <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#ffffff" class="bi bi-credit-card" viewBox="0 0 16 16">
+                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
+                    <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                  </svg></a>
+                  <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#ffffff" class="bi bi-alipay" viewBox="0 0 16 16">
+                    <path d="M2.541 0H13.5a2.55 2.55 0 0 1 2.54 2.563v8.297c-.006 0-.531-.046-2.978-.813-.412-.14-.916-.327-1.479-.536q-.456-.17-.957-.353a13 13 0 0 0 1.325-3.373H8.822V4.649h3.831v-.634h-3.83V2.121H7.26c-.274 0-.274.273-.274.273v1.621H3.11v.634h3.875v1.136h-3.2v.634H9.99c-.227.789-.532 1.53-.894 2.202-2.013-.67-4.161-1.212-5.51-.878-.864.214-1.42.597-1.746.998-1.499 1.84-.424 4.633 2.741 4.633 1.872 0 3.675-1.053 5.072-2.787 2.08 1.008 6.37 2.738 6.387 2.745v.105A2.55 2.55 0 0 1 13.5 16H2.541A2.55 2.55 0 0 1 0 13.437V2.563A2.55 2.55 0 0 1 2.541 0"/>
+                    <path d="M2.309 9.27c-1.22 1.073-.49 3.034 1.978 3.034 1.434 0 2.868-.925 3.994-2.406-1.602-.789-2.959-1.353-4.425-1.207-.397.04-1.14.217-1.547.58Z"/>
+                  </svg></a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+    
+        <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+          <p>© 2024 PawsClime, Inc. All rights reserved.</p>
+          <ul class="list-unstyled d-flex gap-3">
+            <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-facebook" viewBox="0 0 16 16">
+              <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
+            </svg></a></li>
+            <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-tiktok" viewBox="0 0 16 16">
+              <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/>
+            </svg></a></li>
+            <li><a href="#"></a><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-instagram" viewBox="0 0 16 16">
+              <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+            </svg></li>
+          </ul>
+        </div>
+      </footer>
+    </div>
+  </footer>
+
+<!-- For offcanvass -->
+<div class="offcanvas offcanvas-end bg-primary" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-dashboard bg-primary">
+    <div class="offcanvas-header">
+      <a class="navbar-brand fw-bolder fst-italic" aria-current="page"  href="#">PawsClime</a>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="dashboard text-center d-flex mx-auto flex-column">
+      <a href="#"><img src="icons/dogfood.jpg" class="rounded-circle" width="150" height="150"></a>
+      <h1 class="dashboard-username">Gerry Tapuyo</h1>
+      <p class="text-primary">Owner</p>
+    </div>
+  </div>
+  <div class="offcanvas-body">
+      <div class="feeding-tracker">
+        <h1 class="feeding-tracker-title fw-bold text-white">Feeding Tracker</h1>
+        <div class="feeding-tracker-body">
+          <div class="feeding-tracker text-white">
+            <form id="feeding-form" class="mb-4">
+              <div class="mb-3">
+                <label for="petName" class="form-label">Pet Name</label>
+                <input type="text" class="form-control" id="petName" required>
+              </div>
+              <div class="mb-3">
+                <label for="foodType" class="form-label">Type of Food</label>
+                <input type="text" class="form-control" id="foodType" required>
+              </div>
+              <div class="mb-3">
+                <label for="foodAmount" class="form-label">Amount of Food</label>
+                <input type="number" class="form-control" id="foodAmount" required>
+              </div>
+              <div class="mb-3">
+                <label for="feedingTime" class="form-label">Feeding Time</label>
+                <input type="time" class="form-control" id="feedingTime" required>
+              </div>
+              <button type="submit" class="btn btn-success">Add Feeding</button>
+            </form>
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Pet Name</th>
+                  <th>Type of Food</th>
+                  <th>Amount of Food</th>
+                  <th>Feeding Time</th>
+                </tr>
+              </thead>
+              <tbody id="feeding-records">
+                <!-- Feeding records -->
+              </tbody>
+            </table>
+            <button id="delete-last-record" class="btn btn-danger mb-4">Delete Last Record</button>
+          </div>          
+        </div>
+    </div>      
+  <div class="buttons-profile d-grid mt-2">
+    <a class="text-white text-decoration-none" href="#">Want To Know More About Pet Wellness?</a>
+  </div>
+</div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    let isAdminMode = false;
+    
+    function toggleMode() {
+        isAdminMode = !isAdminMode;
+        document.body.classList.toggle('admin-mode', isAdminMode);
+        document.getElementById('modeToggle').textContent = isAdminMode ? 'Admin Mode' : 'User Mode';
+    }
+    
+    function createPost(event) {
+        event.preventDefault();
+    
+        const authorName = document.getElementById('authorName').value;
+        const postTitle = document.getElementById('postTitle').value;
+        const postContent = document.getElementById('postContent').value;
+        const postTags = document.getElementById('postTags').value;
+    
+        const postId = Date.now().toString();
+        const post = {
+            id: postId,
+            authorName,
+            postTitle,
+            postContent,
+            postTags,
+            postDate: new Date().toLocaleString(),
+            likes: 0,
+            comments: []
+        };
+    
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        posts.push(post);
+        localStorage.setItem('posts', JSON.stringify(posts));
+    
+        // Clear the existing posts section before adding new posts
+        const postsSection = document.getElementById('postsSection');
+        postsSection.innerHTML = '';
+    
+        posts.forEach(addPostToDOM);
+        document.getElementById('createPostForm').reset();
+    }
+    
+    function addPostToDOM(post) {
+        const postElement = document.createElement('div');
+        postElement.className = 'card mb-3';
+        postElement.setAttribute('data-post-id', post.id);
+    
+        postElement.innerHTML = `
+            <div class="card-body">
+                <h5 class="card-title">${post.postTitle}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">${post.postTags}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">${post.authorName} - ${post.postDate}</h6>
+                <p class="card-text">${post.postContent}</p>
+                <button class="btn btn-outline-success" onclick="likePost('${post.id}')">Like (${post.likes})</button>
+                <button class="btn btn-outline-secondary" onclick="toggleComments('${post.id}')">Show Comments</button>
+                <div class="edit-delete-buttons">
+                    <button class="btn btn-warning btn-sm admin-buttons edit-button" onclick="editPost('${post.id}')">Edit</button>
+                    <button class="btn btn-danger btn-sm admin-buttons delete-button" onclick="deletePost('${post.id}')">Delete</button>
+                    <button class="btn btn-primary btn-sm save-button" style="display: none;" onclick="saveChanges('${post.id}')">Save Posts</button>
+                </div>
+                <div class="comments-section mt-3" style="display: none;">
+                    <form onsubmit="addComment(event, '${post.id}')">
+                        <div class="form-group">
+                            <input type="text" id="commentAuthor" class="form-control" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="commentContent" class="form-control" placeholder="Add a comment" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Comment</button>
+                    </form>
+                    <div class="comments-list mt-3"></div>
+                </div>
+            </div>
+        `;
+    
+        document.getElementById('postsSection').appendChild(postElement);
+    
+        // Load comments for this post from localStorage
+        const comments = JSON.parse(localStorage.getItem('comments')) || [];
+        const postComments = comments.filter(comment => comment.postId === post.id);
+        postComments.forEach(addCommentToDOM);
+    }
+    
+    
+    function addComment(event, postId) {
+        event.preventDefault();
+    
+        const form = event.target;
+        const authorName = form.querySelector('#commentAuthor').value;
+        const commentContent = form.querySelector('#commentContent').value;
+    
+        const commentId = Date.now().toString();
+        const comment = {
+            id: commentId,
+            postId,
+            authorName,
+            commentContent
+        };
+    
+        // Retrieve existing comments from localStorage or initialize an empty array
+        let comments = JSON.parse(localStorage.getItem('comments')) || [];
+    
+        // Push the new comment to the comments array
+        comments.push(comment);
+    
+        // Update the comments data in localStorage
+        localStorage.setItem('comments', JSON.stringify(comments));
+    
+        // Add the comment to the DOM
+        addCommentToDOM(comment);
+    
+        // Reset the form after adding the comment
+        form.reset();
+    }
+    
+    function addCommentToDOM(comment) {
+        const postElement = document.querySelector(`[data-post-id='${comment.postId}']`);
+        const commentsList = postElement.querySelector('.comments-list');
+    
+        const commentElement = document.createElement('div');
+        commentElement.className = 'card mb-2';
+        commentElement.setAttribute('data-comment-id', comment.id);
+    
+        commentElement.innerHTML = `
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">${comment.authorName}</h6>
+                <p class="card-text">${comment.commentContent}</p>
+                <button class="btn btn-warning btn-sm admin-buttons edit-button" onclick="editComment('${comment.id}')">Edit</button>
+                <button class="btn btn-danger btn-sm admin-buttons delete-button" onclick="deleteComment('${comment.id}')">Delete</button>
+            </div>
+        `;
+    
+        // Append the comment to the comments list
+        commentsList.appendChild(commentElement);
+    }
+    
+    // Load posts and comments from localStorage on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const posts = JSON.parse(localStorage.getItem('posts')) || [];
+        posts.forEach(addPostToDOM);
+    
+        const comments = JSON.parse(localStorage.getItem('comments')) || [];
+        comments.forEach(addCommentToDOM);
+    });
+    
+    function likePost(postId) {
+        const likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || [];
+        if (likedPosts.includes(postId)) return; // Prevent multiple likes
+    
+        likedPosts.push(postId);
+        localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+    
+        const posts = JSON.parse(localStorage.getItem('posts'));
+        const post = posts.find(p => p.id === postId);
+        post.likes += 1;
+        localStorage.setItem('posts', JSON.stringify(posts));
+        document.querySelector(`[data-post-id='${postId}'] .btn-outline-success`).innerHTML = `Like (${post.likes})`;
+    }
+    
+    function deletePost(postId) {
+        let posts = JSON.parse(localStorage.getItem('posts'));
+        posts = posts.filter(p => p.id !== postId);
+        localStorage.setItem('posts', JSON.stringify(posts));
+        document.querySelector(`[data-post-id='${postId}']`).remove();
+    }
+    
+    let isEditing = false;
+    
+    function editPost(postId) {
+        if (isEditing) return; // Prevent editing while already editing
+        isEditing = true; // Set editing flag to true
+    
+        const postElement = document.querySelector(`[data-post-id='${postId}']`);
+        const postContentElement = postElement.querySelector('.card-text');
+        const postTopicElement = postElement.querySelector('.card-subtitle');
+    
+        const postContent = postContentElement.textContent;
+        const postTopic = postTopicElement.textContent;
+    
+        const postContentInput = document.createElement('textarea');
+        postContentInput.className = 'form-control';
+        postContentInput.value = postContent;
+    
+        const postTopicInput = document.createElement('select');
+        postTopicInput.className = 'form-control';
+        postTopicInput.innerHTML = `
+            <option value="Nutrition" ${postTopic === 'Nutrition' ? 'selected' : ''}>
+            Nutrition</option>
+            <option value="Exercise" ${postTopic === 'Exercise' ? 'selected' : ''}>Exercise</option>
+            <option value="Grooming" ${postTopic === 'Grooming' ? 'selected' : ''}>Grooming</option>
+        `;
+    
+        postContentElement.replaceWith(postContentInput);
+        postTopicElement.replaceWith(postTopicInput);
+    
+        const saveButton = document.createElement('button');
+        saveButton.className = 'btn btn-primary btn-sm save-button';
+        saveButton.textContent = 'Save Posts';
+        saveButton.onclick = () => {
+            postContentElement.textContent = postContentInput.value;
+            postTopicElement.textContent = postTopicInput.value;
+            postContentInput.replaceWith(postContentElement);
+            postTopicInput.replaceWith(postTopicElement);
+    
+            let posts = JSON.parse(localStorage.getItem('posts'));
+            const post = posts.find(p => p.id === postId);
+            post.postContent = postContentElement.textContent;
+            post.postTags = postTopicElement.textContent;
+            localStorage.setItem('posts', JSON.stringify(posts));
+            saveButton.remove();
+            isEditing = false; // Reset editing flag
+        };
+    
+        const editDeleteButtons = postElement.querySelector('.edit-delete-buttons');
+        // Insert the save button after the edit and delete buttons
+        editDeleteButtons.insertAdjacentElement('afterend', saveButton);
+    }
+    
+    
+    function deleteComment(commentId) {
+        let comments = JSON.parse(localStorage.getItem('comments'));
+        comments = comments.filter(c => c.id !== commentId);
+        localStorage.setItem('comments', JSON.stringify(comments));
+        document.querySelector(`[data-comment-id='${commentId}']`).remove();
+    }
+    
+    function editComment(commentId) {
+        if (isEditing) return; // Prevent editing while already editing
+        isEditing = true; // Set editing flag to true
+    
+        const commentElement = document.querySelector(`[data-comment-id='${commentId}']`);
+        const commentContentElement = commentElement.querySelector('.card-text');
+    
+        const commentContent = commentContentElement.textContent;
+        const commentContentInput = document.createElement('textarea');
+        commentContentInput.className = 'form-control';
+        commentContentInput.value = commentContent;
+    
+        commentContentElement.replaceWith(commentContentInput);
+    
+        const saveButton = document.createElement('button');
+        saveButton.className = 'btn btn-primary btn-sm';
+        saveButton.textContent = 'Save Comment';
+        saveButton.onclick = () => {
+            commentContentElement.textContent = commentContentInput.value;
+            commentContentInput.replaceWith(commentContentElement);
+    
+            let comments = JSON.parse(localStorage.getItem('comments'));
+            const comment = comments.find(c => c.id === commentId);
+            comment.commentContent = commentContentElement.textContent;
+            localStorage.setItem('comments', JSON.stringify(comments));
+            saveButton.remove();
+            isEditing = false; // Reset editing flag
+        };
+    
+        const commentCardBody = commentElement.querySelector('.card-body');
+        // Check if save button already exists before appending
+        const existingSaveButton = commentCardBody.querySelector('.save-button');
+        if (!existingSaveButton) {
+            commentCardBody.appendChild(saveButton);
+        }
+    }
+    
+    function toggleComments(postId) {
+        const postElement = document.querySelector(`[data-post-id='${postId}']`);
+        const commentsSection = postElement.querySelector('.comments-section');
+        // Toggle the display style between 'block' and 'none'
+        commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+    }
+    
+    function filterPosts(topic) {
+        const postsSection = document.getElementById('postsSection');
+        postsSection.innerHTML = '';
+    
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        if (topic !== 'all') {
+            posts = posts.filter(post => post.postTags === topic);
+        }
+    
+        posts.forEach(addPostToDOM);
+    }
+    
+  </script>
+</body>
+</html>
